@@ -13,7 +13,7 @@ class Store extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginScreen(),
+      home: SignUpScreen(),
     );
   }
 }
