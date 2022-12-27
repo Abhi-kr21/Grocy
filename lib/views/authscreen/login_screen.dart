@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
@@ -17,6 +16,10 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: authBackground,
+          elevation: 0,
+        ),
         backgroundColor: authBackground,
         body: SingleChildScrollView(
           child: Form(
@@ -26,7 +29,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   "assets/images/login.png",
-                  height: 300,
+                  height: 250,
                   width: 500,
                 ),
                 space,

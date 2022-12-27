@@ -19,6 +19,7 @@ class SignUpScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: authBackground,
+          elevation: 0,
         ),
         backgroundColor: authBackground,
         body: SingleChildScrollView(

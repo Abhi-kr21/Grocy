@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store/views/authscreen/auth_screen.dart';
 import 'package:store/views/authscreen/login_screen.dart';
 import 'package:store/views/authscreen/sigup_screen.dart';
 import 'package:store/views/homescreen/home_screen.dart';
@@ -13,7 +14,8 @@ class Store extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SignUpScreen(),
+      debugShowCheckedModeBanner: false,
+      home: AuthScreen(),
     );
   }
 }
