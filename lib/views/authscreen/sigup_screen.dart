@@ -42,7 +42,7 @@ class SignUpScreen extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.only(right: 60, top: 10),
                   child: Text(
-                    "Create a new Account",
+                    "Create a Account",
                     style: TextStyle(
                         fontSize: 30, color: Colors.white, letterSpacing: 1.2),
                   ),
@@ -182,7 +182,7 @@ class SignUpScreen extends StatelessWidget {
                             print("not validate");
                           }
                         },
-                        child: Text("Submit"),
+                        child: const Text("Submit"),
                       );
                     })),
                   ),
@@ -193,13 +193,11 @@ class SignUpScreen extends StatelessWidget {
                     builder: ((context, controller, child) {
                   var status = controller.signupStatus;
                   if (status == AuthSignupStatus.loading) {
-                    return CircularProgressIndicator(
+                    return const CircularProgressIndicator(
                       color: authMaterialButtonColor,
                     );
                   } else {
-                    return SizedBox(
-                      height: 10,
-                    );
+                    return SizedBox();
                   }
                 }))
               ],

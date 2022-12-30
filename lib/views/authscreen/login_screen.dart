@@ -1,12 +1,16 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
+import 'package:store/controller/auth_screen_controller.dart';
 import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/common_ui/auth_textfields.dart';
 import 'package:store/views/homescreen/home_screen.dart';
+
+import '../../enums/enums.dart';
 
 class LoginScreen extends StatelessWidget {
   final Authservice _auth = Authservice(FirebaseAuth.instance);
@@ -97,35 +101,56 @@ class LoginScreen extends StatelessWidget {
                 Center(
                   child: SizedBox(
                     width: displayWidth(context) * 0.5,
-                    child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      color: authMaterialButtonColor,
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          final nav = Navigator.of(context);
-                          dynamic loginResponse = await _auth.signIn(
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim());
-                          //print("email:${emailController.text}");
-                          if (loginResponse.runtimeType == UserCredential) {
-                            nav.push(MaterialPageRoute(
-                                builder: ((context) => HomeScreen())));
-                            prefs.then((value) => value.setBool("login", true));
-                          } else {
-                            String s = loginResponse;
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(SnackBar(content: Text(s)));
-                          }
-                        } else {
-                          print("not validate");
-                        }
-                      },
-                      child: Text("Submit"),
+                    child: Consumer<AuthScreenController>(
+                      builder: ((context, controller, child) {
+                        return MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          color: authMaterialButtonColor,
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              controller.startLogin();
+                              final nav = Navigator.of(context);
+                              dynamic loginResponse = await _auth.signIn(
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim());
+                              //print("email:${emailController.text}");
+                              if (loginResponse.runtimeType == UserCredential) {
+                                controller.stopLogin();
+                                nav.push(MaterialPageRoute(
+                                    builder: ((context) => HomeScreen())));
+                                prefs.then(
+                                    (value) => value.setBool("login", true));
+                              } else {
+                                String s = loginResponse;
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(content: Text(s)));
+                              }
+                            } else {
+                              print("not validate");
+                            }
+                          },
+                          child: Text("Submit"),
+                        );
+                      }),
                     ),
                   ),
                 ),
+                space,
+                Consumer<AuthScreenController>(
+                    builder: ((context, controller, child) {
+                  var status = controller.loginStatus;
+                  if (status == AuthLoginStatus.loading) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: authMaterialButtonColor,
+                      ),
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+                }))
               ],
             ),
           ),
