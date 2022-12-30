@@ -7,7 +7,7 @@ class Authservice {
 
   Authservice(this._auth);
 
-  Stream<User?> get austhStateChanges => _auth.authStateChanges();
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
 
 //sign out
   Future<void> signOut() async {
@@ -36,7 +36,7 @@ class Authservice {
     try {
       UserCredential? userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
-      await userCredential.user!.sendEmailVerification();
+      // await userCredential.user!.sendEmailVerification();
       return userCredential;
     } on FirebaseAuthException catch (e) {
       return e.message;

@@ -29,7 +29,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  flutter_riverpod: ^2.1.1
   flutter:
     sdk: flutter
 
@@ -39,6 +38,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.0.5
   firebase_auth: ^4.2.3
+  pandabar: ^0.1.2
+  hexcolor: ^3.0.1
+  firebase_core: ^2.4.0
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

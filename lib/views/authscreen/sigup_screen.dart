@@ -1,11 +1,23 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store/constants/color_contsants.dart';
+import 'package:store/controller/auth_screen_controller.dart';
+import 'package:store/enums/enums.dart';
+import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/common_ui/auth_textfields.dart';
 
 import '../../constants/heigth_width_constant.dart';
+import '../homescreen/home_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
+
+  final Authservice _auth = Authservice(FirebaseAuth.instance);
+  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phonenumberController = TextEditingController();
@@ -28,7 +40,7 @@ class SignUpScreen extends StatelessWidget {
             child: Column(
               children: [
                 const Padding(
-                  padding: const EdgeInsets.only(right: 60, top: 10),
+                  padding: EdgeInsets.only(right: 60, top: 10),
                   child: Text(
                     "Create a new Account",
                     style: TextStyle(
@@ -41,7 +53,7 @@ class SignUpScreen extends StatelessWidget {
                   child: AuthTextField(
                     controller: nameController,
                     label: "Name",
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.person,
                       color: Colors.white60,
                     ),
@@ -132,35 +144,64 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
                 space,
-                space,
+                //  space,
                 Center(
                   child: SizedBox(
                     width: displayWidth(context) * 0.5,
-                    child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      color: authMaterialButtonColor,
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          print(emailController.text);
+                    child: Consumer<AuthScreenController>(
+                        builder: ((context, controller, child) {
+                      return MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        color: authMaterialButtonColor,
+                        onPressed: () async {
                           print("validate");
+                          if (_formKey.currentState!.validate()) {
+                            controller.startSigningUp();
+                            final nav = Navigator.of(context);
+                            final dynamic response = await _auth.signUp(
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim());
 
-                          if (passwordController.value !=
-                              confirmpasswordController.value) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'password and confirm password should be same')));
+                            if (response.runtimeType == UserCredential) {
+                              controller.stopSigningUp();
+                              prefs.then(
+                                  (value) => value.setBool("login", true));
+                              nav.push(MaterialPageRoute(
+                                  builder: ((context) => HomeScreen())));
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('successfull')));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Not successfull')));
+                            }
+                          } else {
+                            print("not validate");
                           }
-                        } else {
-                          print("not validate");
-                        }
-                      },
-                      child: Text("Submit"),
-                    ),
+                        },
+                        child: Text("Submit"),
+                      );
+                    })),
                   ),
                 ),
+                space,
+
+                Consumer<AuthScreenController>(
+                    builder: ((context, controller, child) {
+                  var status = controller.signupStatus;
+                  if (status == AuthSignupStatus.loading) {
+                    return CircularProgressIndicator(
+                      color: authMaterialButtonColor,
+                    );
+                  } else {
+                    return SizedBox(
+                      height: 10,
+                    );
+                  }
+                }))
               ],
             ),
           ),

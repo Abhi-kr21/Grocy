@@ -1,11 +1,17 @@
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
+import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/common_ui/auth_textfields.dart';
+import 'package:store/views/homescreen/home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
+  final Authservice _auth = Authservice(FirebaseAuth.instance);
   TextEditingController emailController = TextEditingController();
+  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   LoginScreen({super.key});
@@ -96,11 +102,22 @@ class LoginScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       color: authMaterialButtonColor,
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          print("validate");
-                          print("email:${emailController.text}");
-                          // print("password:$passwordController");
+                          final nav = Navigator.of(context);
+                          dynamic loginResponse = await _auth.signIn(
+                              email: emailController.text.trim(),
+                              password: passwordController.text.trim());
+                          //print("email:${emailController.text}");
+                          if (loginResponse.runtimeType == UserCredential) {
+                            nav.push(MaterialPageRoute(
+                                builder: ((context) => HomeScreen())));
+                            prefs.then((value) => value.setBool("login", true));
+                          } else {
+                            String s = loginResponse;
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text(s)));
+                          }
                         } else {
                           print("not validate");
                         }

@@ -10,4 +10,13 @@ class User {
       required this.pnumber,
       required this.email,
       required this.joinedon});
+  Map<String, dynamic> tojson() {
+    return {
+      'name': name,
+      'pnumber': pnumber,
+      'email': email,
+      'joined on': joinedon,
+      'user id': userid,
+    };
+  }
 }
