@@ -7,6 +7,7 @@ class AuthTextField extends StatelessWidget {
   final Icon prefixIcon;
   final suffixIcon;
   final maxlength;
+  final keyboardtype;
 
   /// A function that takes a string and returns a string.
   String? Function(String?)? validator;
@@ -17,10 +18,12 @@ class AuthTextField extends StatelessWidget {
       required this.prefixIcon,
       this.suffixIcon,
       this.maxlength,
-      required this.validator});
+      required this.validator,
+      this.keyboardtype});
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: keyboardtype,
       controller: controller,
       maxLength: maxlength,
       validator: validator,

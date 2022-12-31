@@ -6,11 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
 import 'package:store/controller/auth_screen_controller.dart';
+import 'package:store/enums/enums.dart';
 import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/common_ui/auth_textfields.dart';
-import 'package:store/views/homescreen/home_screen.dart';
-
-import '../../enums/enums.dart';
+import 'package:store/views/screens/homescreen/home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final Authservice _auth = Authservice(FirebaseAuth.instance);
@@ -116,8 +115,8 @@ class LoginScreen extends StatelessWidget {
                                   email: emailController.text.trim(),
                                   password: passwordController.text.trim());
                               //print("email:${emailController.text}");
+                              controller.stopLogin();
                               if (loginResponse.runtimeType == UserCredential) {
-                                controller.stopLogin();
                                 nav.push(MaterialPageRoute(
                                     builder: ((context) => HomeScreen())));
                                 prefs.then(
@@ -127,8 +126,6 @@ class LoginScreen extends StatelessWidget {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(content: Text(s)));
                               }
-                            } else {
-                              print("not validate");
                             }
                           },
                           child: Text("Submit"),

@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store/constants/color_contsants.dart';
+import 'package:store/constants/heigth_width_constant.dart';
 import 'package:store/controller/auth_screen_controller.dart';
 import 'package:store/enums/enums.dart';
 import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/common_ui/auth_textfields.dart';
-
-import '../../constants/heigth_width_constant.dart';
 import '../homescreen/home_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -90,6 +89,7 @@ class SignUpScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: AuthTextField(
+                    keyboardtype: TextInputType.number,
                     controller: phonenumberController,
                     label: "Phone number",
                     prefixIcon: Icon(
@@ -160,26 +160,36 @@ class SignUpScreen extends StatelessWidget {
                           if (_formKey.currentState!.validate()) {
                             controller.startSigningUp();
                             final nav = Navigator.of(context);
-                            final dynamic response = await _auth.signUp(
+                            final sms = ScaffoldMessenger.of(context);
+                            final dynamic Signupresponse = await _auth.signUp(
                                 email: emailController.text.trim(),
                                 password: passwordController.text.trim());
-
-                            if (response.runtimeType == UserCredential) {
-                              controller.stopSigningUp();
-                              prefs.then(
-                                  (value) => value.setBool("login", true));
-                              nav.push(MaterialPageRoute(
-                                  builder: ((context) => HomeScreen())));
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('successfull')));
+                            controller.stopSigningUp();
+                            if (passwordController.text !=
+                                    confirmpasswordController.text ||
+                                phonenumberController.text.length < 10) {
+                              if (phonenumberController.text.length < 10) {
+                                sms.showSnackBar(SnackBar(
+                                    content: Text(
+                                        "Phone number can't be less than 10")));
+                              } else {
+                                sms.showSnackBar(SnackBar(
+                                    content: Text(
+                                        "Password and Confirm Password should be same")));
+                              }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Not successfull')));
+                              if (Signupresponse.runtimeType ==
+                                  UserCredential) {
+                                prefs.then(
+                                    (value) => value.setBool("login", true));
+                                nav.push(MaterialPageRoute(
+                                    builder: ((context) => HomeScreen())));
+                              } else {
+                                String ErrorMessage = Signupresponse;
+                                sms.showSnackBar(
+                                    SnackBar(content: Text(ErrorMessage)));
+                              }
                             }
-                          } else {
-                            print("not validate");
                           }
                         },
                         child: const Text("Submit"),

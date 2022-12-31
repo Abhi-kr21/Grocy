@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
-
-import '../../constants/color_contsants.dart';
-import 'login_screen.dart';
-import 'sigup_screen.dart';
+import 'package:store/views/screens/AuthScreen/login_screen.dart';
+import 'package:store/views/screens/AuthScreen/sigup_screen.dart';
 
 class AuthScreen extends StatelessWidget {
   AuthScreen({super.key});

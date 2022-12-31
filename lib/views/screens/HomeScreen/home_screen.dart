@@ -21,13 +21,10 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: Text(
-            "Grocy",
-            style: TextStyle(
-              color: Colors.black,
-            ),
+        title: Text(
+          "Grocy",
+          style: TextStyle(
+            color: Colors.black,
           ),
         ),
         actions: [
@@ -140,15 +137,17 @@ class HomeScreen extends StatelessWidget {
         ),
         backgroundColor: Colors.green[50],
         buttonData: [
-          PandaBarButtonData(icon: Icons.home, title: "Home"),
-          PandaBarButtonData(icon: Icons.shopify_outlined, title: "Trending"),
-          PandaBarButtonData(icon: Icons.wallet, title: "My order"),
-          PandaBarButtonData(icon: Icons.person, title: "My account"),
+          PandaBarButtonData(icon: Icons.home, title: "Home", id: 0),
+          PandaBarButtonData(
+              icon: Icons.shopify_outlined, title: "Trending", id: 1),
+          PandaBarButtonData(icon: Icons.wallet, title: "My order", id: 2),
+          PandaBarButtonData(icon: Icons.person, title: "My Profile", id: 3),
         ],
         onChange: (id) {
           // setState(() {
-          //   page = id;
-          // });
+          //     page = id;
+          // }
+          // );
         },
         onFabButtonPressed: () {},
       ),

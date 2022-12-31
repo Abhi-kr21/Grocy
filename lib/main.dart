@@ -5,10 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store/controller/auth_screen_controller.dart';
 import 'package:store/services/firebase/auth_service.dart';
-import 'package:store/views/authscreen/auth_screen.dart';
-import 'package:store/views/authscreen/login_screen.dart';
-import 'package:store/views/authscreen/sigup_screen.dart';
-import 'package:store/views/homescreen/home_screen.dart';
+import 'package:store/views/screens/AuthScreen/auth_screen.dart';
+import 'package:store/views/screens/HomeScreen/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,42 +14,24 @@ Future<void> main() async {
   runApp(Store());
 }
 
-class Store extends StatefulWidget {
+class Store extends StatelessWidget {
   const Store({super.key});
 
-  @override
-  State<Store> createState() => _StoreState();
-}
-
-class _StoreState extends State<Store> {
-  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
-  }
-
   Future<bool> getPref() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool data = false;
 
-    await prefs.then(
-      (value) {
-        if (value.containsKey("login")) {
-          //  print("preference found and its value is ${value.getBool("login")}");
-          data = value.getBool("login")!;
-        } else {
-          print("no preference found");
-        }
-      },
-    );
-
+    if (prefs.containsKey("login")) {
+      //  print("preference found and its value is ${value.getBool("login")}");
+      data = prefs.getBool("login")!;
+    } else {
+      print("no preference found");
+    }
     return data;
   }
 
   @override
   Widget build(BuildContext context) {
-    bool Isloggedin = false;
     return MultiProvider(
       providers: [
         //AuthController
@@ -62,12 +42,15 @@ class _StoreState extends State<Store> {
         home: FutureBuilder(
           future: getPref(),
           builder: (context, AsyncSnapshot<bool> snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data!) {
-                return HomeScreen();
-                // return AuthScreen();
+            if (snapshot.connectionState == ConnectionState.active ||
+                snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                if (snapshot.data!) {
+                  return HomeScreen();
+                  // return ProfileScreen();
+                }
+                return AuthScreen();
               }
-              return AuthScreen();
             }
             return AuthScreen();
           },
