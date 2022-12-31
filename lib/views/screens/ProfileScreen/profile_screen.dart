@@ -77,9 +77,9 @@ class ProfileScreen extends StatelessWidget {
                         SizedBox(
                           width: displayWidth(context) * 0.35,
                           child: ElevatedButton(
-                              onPressed: () {
-                                _auth.signOut();
-                                prefs.then(
+                              onPressed: () async {
+                                await _auth.signOut();
+                                await prefs.then(
                                     (value) => value.setBool("login", false));
                                 Navigator.pushReplacement(
                                     context,
@@ -104,7 +104,10 @@ class ProfileScreen extends StatelessWidget {
                     top: 25,
                     left: 1,
                     child: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.arrow_back))),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.arrow_back))),
               ],
             )));
   }

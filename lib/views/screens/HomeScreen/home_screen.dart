@@ -4,6 +4,11 @@ import 'package:pandabar/main.view.dart';
 import 'package:pandabar/model.dart';
 import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
+import 'package:store/views/screens/CartScreen/cart_scren.dart';
+import 'package:store/views/screens/MyOrderScreen/myorder_screen.dart';
+import 'package:store/views/screens/ProfileScreen/profile_screen.dart';
+import 'package:store/views/screens/SearchScreen/search_screen.dart';
+import 'package:store/views/screens/TrendingScreen/trending_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   List<Color> color = [
@@ -29,7 +34,13 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchScreen(),
+                  ));
+            },
             icon: Icon(
               Icons.search,
               color: Colors.black,
@@ -143,13 +154,28 @@ class HomeScreen extends StatelessWidget {
           PandaBarButtonData(icon: Icons.wallet, title: "My order", id: 2),
           PandaBarButtonData(icon: Icons.person, title: "My Profile", id: 3),
         ],
+        // buttonSelectedColor: null,
         onChange: (id) {
-          // setState(() {
-          //     page = id;
-          // }
-          // );
+          if (id == 1) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: ((context) => TrendingScreen())));
+          }
+          if (id == 2) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: ((context) => MyOrderScreen())));
+          }
+          if (id == 3) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: ((context) => ProfileScreen())));
+          }
         },
-        onFabButtonPressed: () {},
+        onFabButtonPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CartScreen(),
+              ));
+        },
       ),
     );
   }

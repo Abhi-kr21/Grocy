@@ -1,6 +1,8 @@
-import 'dart:developer';
+import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +10,7 @@ import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
 import 'package:store/controller/auth_screen_controller.dart';
 import 'package:store/enums/enums.dart';
+import 'package:store/models/user_model.dart' as um;
 import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/common_ui/auth_textfields.dart';
 import '../homescreen/home_screen.dart';
@@ -23,7 +26,7 @@ class SignUpScreen extends StatelessWidget {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmpasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var space = const SizedBox(height: 25);
+  final space = const SizedBox(height: 25);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -65,7 +68,7 @@ class SignUpScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Padding(
@@ -100,12 +103,13 @@ class SignUpScreen extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Phone number cannot be empty";
+                      } else if (value.length < 10) {
+                        return "Phone number cannot be less than 10";
                       }
-                      return null;
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Padding(
@@ -113,7 +117,7 @@ class SignUpScreen extends StatelessWidget {
                   child: AuthTextField(
                     controller: passwordController,
                     label: "Password",
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.key,
                       color: Colors.white60,
                     ),
@@ -121,7 +125,6 @@ class SignUpScreen extends StatelessWidget {
                       if (value!.isEmpty) {
                         return "password cannot be empty";
                       }
-                      return null;
                     },
                   ),
                 ),
@@ -131,15 +134,17 @@ class SignUpScreen extends StatelessWidget {
                   child: AuthTextField(
                     controller: confirmpasswordController,
                     label: "Confirm Password",
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.security,
                       color: Colors.white60,
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "confirm password cannot be empty";
+                      } else if (passwordController.text !=
+                          confirmpasswordController.text) {
+                        return "Confirm password should be same as password";
                       }
-                      return null;
                     },
                   ),
                 ),
@@ -165,30 +170,37 @@ class SignUpScreen extends StatelessWidget {
                                 email: emailController.text.trim(),
                                 password: passwordController.text.trim());
                             controller.stopSigningUp();
-                            if (passwordController.text !=
-                                    confirmpasswordController.text ||
-                                phonenumberController.text.length < 10) {
-                              if (phonenumberController.text.length < 10) {
-                                sms.showSnackBar(SnackBar(
-                                    content: Text(
-                                        "Phone number can't be less than 10")));
-                              } else {
-                                sms.showSnackBar(SnackBar(
-                                    content: Text(
-                                        "Password and Confirm Password should be same")));
-                              }
+
+                            if (Signupresponse.runtimeType == UserCredential) {
+                              UserCredential credential =
+                                  Signupresponse as UserCredential;
+
+                              /// Creating a user object and assigning the values to it.
+                              um.User user = um.User(
+                                  userid: credential.user!.uid,
+                                  name: nameController.text,
+                                  pnumber: phonenumberController.text,
+                                  email: emailController.text,
+                                  joinedon: DateTime.now());
+
+                              /// Adding the user object to the firestore database.
+                              await FirebaseFirestore.instance
+                                  .collection("users")
+                                  .add(user.tojson());
+                              // await FirebaseFirestore.instance
+                              //     .collection("user2")
+                              //     .doc()
+                              //     .collection("user1")
+                              //     .doc()
+                              //     .set(user.tojson());
+                              await prefs.then(
+                                  (value) => value.setBool("login", true));
+                              nav.pushReplacement(MaterialPageRoute(
+                                  builder: ((context) => HomeScreen())));
                             } else {
-                              if (Signupresponse.runtimeType ==
-                                  UserCredential) {
-                                prefs.then(
-                                    (value) => value.setBool("login", true));
-                                nav.push(MaterialPageRoute(
-                                    builder: ((context) => HomeScreen())));
-                              } else {
-                                String ErrorMessage = Signupresponse;
-                                sms.showSnackBar(
-                                    SnackBar(content: Text(ErrorMessage)));
-                              }
+                              String errorMessage = Signupresponse;
+                              sms.showSnackBar(
+                                  SnackBar(content: Text(errorMessage)));
                             }
                           }
                         },
@@ -207,7 +219,7 @@ class SignUpScreen extends StatelessWidget {
                       color: authMaterialButtonColor,
                     );
                   } else {
-                    return SizedBox();
+                    return const SizedBox();
                   }
                 }))
               ],

@@ -117,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                               //print("email:${emailController.text}");
                               controller.stopLogin();
                               if (loginResponse.runtimeType == UserCredential) {
-                                nav.push(MaterialPageRoute(
+                                nav.pushReplacement(MaterialPageRoute(
                                     builder: ((context) => HomeScreen())));
                                 prefs.then(
                                     (value) => value.setBool("login", true));

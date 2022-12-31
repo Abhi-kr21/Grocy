@@ -19,4 +19,13 @@ class User {
       'user id': userid,
     };
   }
+
+  User fromJson(Map<String, dynamic> json) {
+    return User(
+        userid: json['userid'],
+        name: json['name'],
+        pnumber: json['pnumber'],
+        email: json['email'],
+        joinedon: json['joined on']);
+  }
 }
