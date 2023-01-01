@@ -7,6 +7,7 @@ import 'package:store/controller/auth_screen_controller.dart';
 import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/screens/AuthScreen/auth_screen.dart';
 import 'package:store/views/screens/HomeScreen/home_screen.dart';
+import 'package:store/views/screens/TrendingScreen/trending_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +48,7 @@ class Store extends StatelessWidget {
               if (snapshot.hasData) {
                 if (snapshot.data!) {
                   return HomeScreen();
-                  // return ProfileScreen();
+                  // return TrendingScreen();
                 }
                 return AuthScreen();
               }

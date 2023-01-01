@@ -53,7 +53,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         space,
                         Listtile(
-                          Licon: Icon(Icons.heart_broken_outlined),
+                          Licon: Icon(Icons.favorite_border),
                           text: "Wishlist",
                           Ticon: Icon(Icons.arrow_forward_ios),
                           tap: () {},
@@ -75,8 +75,12 @@ class ProfileScreen extends StatelessWidget {
                         space,
                         space,
                         SizedBox(
-                          width: displayWidth(context) * 0.35,
+                          width: displayWidth(context) * 0.40,
                           child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.amber[600],
+                                  elevation: 15,
+                                  foregroundColor: Colors.black87),
                               onPressed: () async {
                                 await _auth.signOut();
                                 await prefs.then(
