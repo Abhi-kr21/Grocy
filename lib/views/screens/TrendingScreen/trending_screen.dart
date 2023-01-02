@@ -8,15 +8,6 @@ class TrendingScreen extends StatelessWidget {
   final Space = const SizedBox(
     height: 10,
   );
-  List<Color> color = [
-    Colors.lightGreen,
-    Colors.redAccent,
-    Colors.blue,
-    Colors.cyanAccent,
-    Colors.deepOrange,
-    Colors.yellowAccent,
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +30,7 @@ class TrendingScreen extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              // amber accent container
               height: 250,
               width: double.infinity,
               decoration: BoxDecoration(
@@ -64,20 +56,22 @@ class TrendingScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 30),
                     child: SizedBox(
-                      height: 120,
+                      height: 130,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: trendimages.length,
                         itemBuilder: ((context, index) {
                           return Container(
+                            // best selling items container
                             width: 130,
                             decoration: BoxDecoration(
-                              color: color[index],
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(25),
                             ),
+                            padding: EdgeInsets.all(9),
                             margin: const EdgeInsets.symmetric(horizontal: 8),
                             child: ClipRRect(
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(16),
                                 topRight: Radius.circular(16),
                                 bottomRight: Radius.circular(16),
@@ -129,7 +123,7 @@ class TrendingScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(12),
                                 topRight: Radius.circular(12)),
                             child: Image.asset(
@@ -139,7 +133,7 @@ class TrendingScreen extends StatelessWidget {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 4,
                           ),
                           Padding(
