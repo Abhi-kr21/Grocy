@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store/controller/auth_screen_controller.dart';
+import 'package:store/controller/user_controller.dart';
 import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/screens/AuthScreen/auth_screen.dart';
 import 'package:store/views/screens/HomeScreen/home_screen.dart';
@@ -36,7 +37,11 @@ class Store extends StatelessWidget {
     return MultiProvider(
       providers: [
         //AuthController
-        ChangeNotifierProvider(create: ((context) => AuthScreenController()))
+        ChangeNotifierProvider(create: ((context) => AuthScreenController())),
+        //user controller
+        ChangeNotifierProvider(
+          create: ((context) => UserController()),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

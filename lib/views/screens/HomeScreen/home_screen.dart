@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:pandabar/main.view.dart';
 import 'package:pandabar/model.dart';
+import 'package:provider/provider.dart';
 import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
+import 'package:store/controller/user_controller.dart';
 import 'package:store/views/screens/CartScreen/cart_scren.dart';
 import 'package:store/views/screens/MyOrderScreen/myorder_screen.dart';
 import 'package:store/views/screens/ProfileScreen/profile_screen.dart';
@@ -35,11 +37,12 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SearchScreen(),
-                  ));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => SearchScreen(),
+              //     ));
+              Provider.of<UserController>(context, listen: false).setuser();
             },
             icon: Icon(
               Icons.search,

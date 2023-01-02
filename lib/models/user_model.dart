@@ -1,10 +1,12 @@
-class User {
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class UserModel {
   final String userid;
   final String name;
   final String pnumber;
   final String email;
-  final DateTime joinedon;
-  User(
+  final Timestamp joinedon;
+  UserModel(
       {required this.userid,
       required this.name,
       required this.pnumber,
@@ -20,12 +22,13 @@ class User {
     };
   }
 
-  User fromJson(Map<String, dynamic> json) {
-    return User(
-        userid: json['userid'],
-        name: json['name'],
-        pnumber: json['pnumber'],
-        email: json['email'],
-        joinedon: json['joined on']);
+  factory UserModel.fromJson(DocumentSnapshot<Map<String, dynamic>> json) {
+    print(json.data().toString());
+    return UserModel(
+        userid: json.data()!['user id'],
+        name: json.data()!['name'],
+        pnumber: json.data()!['pnumber'],
+        email: json.data()!['email'],
+        joinedon: json.data()!['joined on']);
   }
 }

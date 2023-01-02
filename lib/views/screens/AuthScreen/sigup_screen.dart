@@ -174,19 +174,21 @@ class SignUpScreen extends StatelessWidget {
                             if (Signupresponse.runtimeType == UserCredential) {
                               UserCredential credential =
                                   Signupresponse as UserCredential;
+                              //  UserCredential credential = Signupresponse;
 
                               /// Creating a user object and assigning the values to it.
-                              um.User user = um.User(
+                              um.UserModel user = um.UserModel(
                                   userid: credential.user!.uid,
                                   name: nameController.text,
                                   pnumber: phonenumberController.text,
                                   email: emailController.text,
-                                  joinedon: DateTime.now());
+                                  joinedon: Timestamp.now());
 
                               /// Adding the user object to the firestore database.
                               await FirebaseFirestore.instance
                                   .collection("users")
-                                  .add(user.tojson());
+                                  .doc(credential.user!.uid)
+                                  .set(user.tojson());
                               // await FirebaseFirestore.instance
                               //     .collection("user2")
                               //     .doc()

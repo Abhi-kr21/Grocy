@@ -43,6 +43,7 @@ class TrendingScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Space,
+                  Space,
                   const Padding(
                     padding: const EdgeInsets.only(right: 140),
                     child: Text(
@@ -54,7 +55,7 @@ class TrendingScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 30),
+                    padding: const EdgeInsets.only(top: 25),
                     child: SizedBox(
                       height: 130,
                       child: ListView.builder(
@@ -69,7 +70,7 @@ class TrendingScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(25),
                             ),
                             padding: EdgeInsets.all(9),
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            margin: const EdgeInsets.symmetric(horizontal: 9),
                             child: ClipRRect(
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(16),
