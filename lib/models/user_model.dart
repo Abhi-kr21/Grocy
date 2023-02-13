@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:store/models/address_model.dart';
 
 class UserModel {
   final String userid;
-  final String name;
-  final String pnumber;
-  final String email;
+  String name;
+  String pnumber;
+  String email;
   final Timestamp joinedon;
+  // List<AddressModel> addresses;
   UserModel(
       {required this.userid,
       required this.name,
+      // required this.addresses,
       required this.pnumber,
       required this.email,
       required this.joinedon});
@@ -23,7 +26,7 @@ class UserModel {
   }
 
   factory UserModel.fromJson(DocumentSnapshot<Map<String, dynamic>> json) {
-    print(json.data().toString());
+    // print(json.data().toString());
     return UserModel(
         userid: json.data()!['user id'],
         name: json.data()!['name'],

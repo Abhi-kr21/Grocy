@@ -10,9 +10,10 @@ import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
 import 'package:store/controller/auth_screen_controller.dart';
 import 'package:store/enums/enums.dart';
-import 'package:store/models/user_model.dart' as um;
+import 'package:store/models/user_model.dart';
 import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/common_ui/auth_textfields.dart';
+import 'package:store/views/screens/AddressScreen/address_screen.dart';
 import '../homescreen/home_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -175,9 +176,8 @@ class SignUpScreen extends StatelessWidget {
                               UserCredential credential =
                                   Signupresponse as UserCredential;
                               //  UserCredential credential = Signupresponse;
-
-                              /// Creating a user object and assigning the values to it.
-                              um.UserModel user = um.UserModel(
+                              //Creating a user object and assigning the values to it.
+                              UserModel user = UserModel(
                                   userid: credential.user!.uid,
                                   name: nameController.text,
                                   pnumber: phonenumberController.text,
@@ -198,7 +198,7 @@ class SignUpScreen extends StatelessWidget {
                               await prefs.then(
                                   (value) => value.setBool("login", true));
                               nav.pushReplacement(MaterialPageRoute(
-                                  builder: ((context) => HomeScreen())));
+                                  builder: ((context) => AddressScreen())));
                             } else {
                               String errorMessage = Signupresponse;
                               sms.showSnackBar(

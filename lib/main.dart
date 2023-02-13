@@ -3,12 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:store/controller/address_controller.dart';
 import 'package:store/controller/auth_screen_controller.dart';
+import 'package:store/controller/cart_controller.dart';
+import 'package:store/controller/category_controller.dart';
+import 'package:store/controller/order_controller.dart';
+import 'package:store/controller/product_controller.dart';
+import 'package:store/controller/search_controller.dart';
 import 'package:store/controller/user_controller.dart';
+import 'package:store/controller/wishlist_controller.dart';
 import 'package:store/services/firebase/auth_service.dart';
 import 'package:store/views/screens/AuthScreen/auth_screen.dart';
 import 'package:store/views/screens/HomeScreen/home_screen.dart';
 import 'package:store/views/screens/TrendingScreen/trending_screen.dart';
+
+import 'views/screens/AddressScreen/address_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +50,27 @@ class Store extends StatelessWidget {
         //user controller
         ChangeNotifierProvider(
           create: ((context) => UserController()),
+        ),
+        ChangeNotifierProvider(
+          create: ((context) => CategoryController()),
+        ),
+        ChangeNotifierProvider(
+          create: ((context) => ProductController()),
+        ),
+        ChangeNotifierProvider(
+          create: ((context) => OrderController()),
+        ),
+        ChangeNotifierProvider(
+          create: ((context) => CartController()),
+        ),
+        ChangeNotifierProvider(
+          create: ((context) => SearchController()),
+        ),
+        ChangeNotifierProvider(
+          create: ((context) => WishlistController()),
+        ),
+        ChangeNotifierProvider(
+          create: ((context) => AddressController()),
         ),
       ],
       child: MaterialApp(

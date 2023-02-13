@@ -5,9 +5,15 @@ import 'package:pandabar/model.dart';
 import 'package:provider/provider.dart';
 import 'package:store/constants/color_contsants.dart';
 import 'package:store/constants/heigth_width_constant.dart';
+import 'package:store/controller/category_controller.dart';
+import 'package:store/controller/product_controller.dart';
 import 'package:store/controller/user_controller.dart';
-import 'package:store/views/screens/CartScreen/cart_scren.dart';
+import 'package:store/enums/enums.dart';
+import 'package:store/views/screens/CartScreen/cart_screen.dart';
+
 import 'package:store/views/screens/MyOrderScreen/myorder_screen.dart';
+import 'package:store/views/screens/ProductScreen/list_of_product_screen.dart';
+import 'package:store/views/screens/ProductScreen/product_screen.dart';
 import 'package:store/views/screens/ProfileScreen/profile_screen.dart';
 import 'package:store/views/screens/SearchScreen/search_screen.dart';
 import 'package:store/views/screens/TrendingScreen/trending_screen.dart';
@@ -37,12 +43,12 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => SearchScreen(),
-              //     ));
-              Provider.of<UserController>(context, listen: false).setuser();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchScreen(),
+                  ));
+              // Provider.of<UserController>(context, listen: false).setuser();
             },
             icon: Icon(
               Icons.search,
@@ -51,97 +57,210 @@ class HomeScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Container(
-              height: displayHeight(context) * 0.15,
-              width: displayWidth(context) * 0.95,
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 90, 237, 164),
-                borderRadius: BorderRadius.circular(20),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Container(
+                height: displayHeight(context) * 0.2,
+                width: displayWidth(context) * 0.95,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 90, 237, 164),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.asset(
+                    "assets/images/groceries-offers.jpg",
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: SizedBox(
-              child: Row(
-                children: [
-                  Text(
-                    "Categories",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  IconButton(
-                      onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
-                ],
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox(
+                child: Row(
+                  children: [
+                    Text(
+                      "Categories",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    IconButton(
+                        onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          SizedBox(
-            height: 110,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: color.length,
-              itemBuilder: ((context, index) {
-                return Container(
-                  width: 130,
-                  decoration: BoxDecoration(
-                    color: color[index],
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 3),
-                );
-              }),
+            SizedBox(
+              height: 5,
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: SizedBox(
-              child: Row(
-                children: [
-                  Text(
-                    "Frequent Buy",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  IconButton(
-                      onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
-                ],
+            Consumer<CategoryController>(
+              builder: (context, categorycontroller, child) {
+                if (categorycontroller.categorystatus == CategoryStatus.NIL) {
+                  categorycontroller.setcategory();
+                }
+                switch (categorycontroller.categorystatus) {
+                  case CategoryStatus.DONE:
+                    return SizedBox(
+                      height: 170,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categorycontroller.categorylist.length,
+                        itemBuilder: ((context, index) {
+                          return InkWell(
+                            onTap: (() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ListOfProduct(
+                                        catId: categorycontroller
+                                            .categorylist[index].categoryid!),
+                                  ));
+                            }),
+                            child: Container(
+                              width: 130,
+                              decoration: BoxDecoration(
+                                color: Colors.greenAccent,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              margin: EdgeInsets.only(left: 15),
+                              child: Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      categorycontroller
+                                          .categorylist[index].image,
+                                      height: 130,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(categorycontroller
+                                      .categorylist[index].categoryname)
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    );
+                  case CategoryStatus.LOADING:
+                    return SizedBox();
+                  case CategoryStatus.NIL:
+                    return SizedBox();
+                }
+              },
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox(
+                child: Row(
+                  children: [
+                    Text(
+                      "Frequent Buy",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    IconButton(
+                        onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          SizedBox(
-            height: 110,
-            child: ListView.builder(
-              // shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: 6,
-              itemBuilder: ((context, index) {
-                return Container(
-                  width: 130,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 193, 197, 198),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 3),
-                );
-              }),
+            SizedBox(
+              height: 5,
             ),
-          ),
-        ],
+            Consumer<ProductController>(
+              builder: (context, productcontroller, child) {
+                if (productcontroller.productfetchstatus ==
+                    ProductFetchStatus.NIL) {
+                  productcontroller.fetchproduct();
+                  return CircularProgressIndicator();
+                } else {
+                  switch (productcontroller.productfetchstatus) {
+                    case ProductFetchStatus.DONE:
+                      // print("reached here");
+                      if (productcontroller.frequentproduct.isEmpty) {
+                        productcontroller.frequentprod();
+                        return CircularProgressIndicator(
+                          color: Colors.orange,
+                        );
+                      } else {
+                        return SizedBox(
+                          height: 170,
+                          child: ListView.builder(
+                            // shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: productcontroller.frequentproduct.length,
+                            itemBuilder: ((context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProductScreen(
+                                            product: productcontroller
+                                                .frequentproduct[index]),
+                                      ));
+                                },
+                                child: Container(
+                                  width: 130,
+                                  decoration: BoxDecoration(
+                                    color: Colors.greenAccent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  margin: EdgeInsets.symmetric(horizontal: 3),
+                                  child: Column(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          productcontroller
+                                              .frequentproduct[index].image,
+                                          height: 130,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(productcontroller
+                                          .frequentproduct[index].productname),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        );
+                      }
+
+                    case ProductFetchStatus.LOADING:
+                      return CircularProgressIndicator(
+                        color: Colors.red,
+                      );
+                    case ProductFetchStatus.NIL:
+                      return CircularProgressIndicator();
+                  }
+                }
+              },
+            )
+          ],
+        ),
       ),
       bottomNavigationBar: PandaBar(
         fabColors: [Colors.red, Colors.blue, Colors.cyanAccent],

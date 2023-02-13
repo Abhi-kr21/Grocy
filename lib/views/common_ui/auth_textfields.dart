@@ -4,7 +4,7 @@ import 'package:store/constants/color_contsants.dart';
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
-  final Icon prefixIcon;
+  final Icon? prefixIcon;
   final suffixIcon;
   final maxlength;
   final keyboardtype;
@@ -15,7 +15,7 @@ class AuthTextField extends StatelessWidget {
   AuthTextField(
       {required this.controller,
       required this.label,
-      required this.prefixIcon,
+      this.prefixIcon,
       this.suffixIcon,
       this.maxlength,
       required this.validator,
