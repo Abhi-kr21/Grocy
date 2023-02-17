@@ -15,6 +15,7 @@ class OrderController extends ChangeNotifier {
   String uid = FirebaseAuth.instance.currentUser!.uid;
   makeorder(
       {
+
       //required List<String> productlists,
       required Timestamp madeorderon}) async {
     try {
@@ -28,9 +29,9 @@ class OrderController extends ChangeNotifier {
           .doc(uid)
           .collection("totals orders")
           .add(order.tojson());
-      await orderdb.doc(uid).update({'uid': uid});
+
       await res.update({'orderid': res.id});
-      print("order succesfull");
+      await fetchorder();
     } catch (e) {
       print(e);
     }
@@ -64,7 +65,7 @@ class OrderController extends ChangeNotifier {
           .collection("totals orders")
           .add(order.tojson());
       await res.update({'orderid': res.id});
-      // await res.update({'orderid': res.id});
+      await fetchorder();
     } catch (e) {
       print(e);
     }
@@ -103,7 +104,11 @@ class OrderController extends ChangeNotifier {
       OrderModel order = OrderModel.fromjson(data.data());
       temp.add(order);
     }
+    temp.sort(
+      (a, b) => b.madeorderon.toDate().compareTo(a.madeorderon.toDate()),
+    );
     orders = temp;
+
     List<Product> t = [];
     for (var od in orders) {
       for (var pid in od.productlist) {
@@ -114,6 +119,7 @@ class OrderController extends ChangeNotifier {
       data.add(t);
       t = [];
     }
+
     orderstatus = OrderStatus.DONE;
     notifyListeners();
   }
