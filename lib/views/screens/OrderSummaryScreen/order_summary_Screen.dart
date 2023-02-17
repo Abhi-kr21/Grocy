@@ -146,6 +146,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => PaymentScreen(
+                                      price: widget.product.prize,
                                       pid: widget.product.productid),
                                 ));
                           },

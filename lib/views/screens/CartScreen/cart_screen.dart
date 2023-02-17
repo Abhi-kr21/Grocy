@@ -16,7 +16,7 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Your cart"),
+          title: const Text("Your cart"),
           backgroundColor: Colors.amber[600],
         ),
         body: Consumer<CartController>(
@@ -25,13 +25,13 @@ class CartScreen extends StatelessWidget {
             if (cartcontroller.cartstatus == CartStatus.NIL) {
               cartcontroller.setcart();
 
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else {
               switch (cartcontroller.cartstatus) {
                 case CartStatus.DONE:
-                  Future.delayed(Duration(microseconds: 1));
+                  Future.delayed(const Duration(microseconds: 1));
                   return (cartcontroller.productlist.isEmpty)
-                      ? Center(child: Text("no item in cart"))
+                      ? const Center(child: Text("no item in cart"))
                       : ListView.builder(
                           itemCount: cartcontroller.productlist.length,
                           itemBuilder: (BuildContext context, int index) {
@@ -51,7 +51,7 @@ class CartScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     color: Colors.amberAccent,
                                     borderRadius: BorderRadius.circular(10)),
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                     left: 10, right: 10, top: 15, bottom: 0),
                                 child: Row(
                                   children: [
@@ -69,19 +69,26 @@ class CartScreen extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
-                                        Text(
-                                            "Brand:   ${cartcontroller.productlist[index].productname}"),
                                         SizedBox(
+                                          width: 173,
+                                          child: Text(
+                                            "Brand:   ${cartcontroller.productlist[index].productname}",
+                                            style: TextStyle(
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                          ),
+                                        ),
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                         Text(
                                             "Price:   ₹ ${cartcontroller.productlist[index].prize.toString()}"),
                                         Row(
                                           children: [
-                                            Text("Quantity"),
+                                            const Text("Quantity"),
                                             IconButton(
                                                 onPressed: () {
                                                   cartcontroller
@@ -90,7 +97,7 @@ class CartScreen extends StatelessWidget {
                                                   cartcontroller.billupdate(
                                                       index: index);
                                                 },
-                                                icon: Icon(Icons.add)),
+                                                icon: const Icon(Icons.add)),
                                             Text(cartcontroller.quantity[index]
                                                 .toString()),
                                             IconButton(
@@ -101,7 +108,7 @@ class CartScreen extends StatelessWidget {
                                                   cartcontroller.billdecreses(
                                                       index: index);
                                                 },
-                                                icon: Icon(Icons.remove)),
+                                                icon: const Icon(Icons.remove)),
                                           ],
                                         )
                                       ],
@@ -111,7 +118,7 @@ class CartScreen extends StatelessWidget {
                                           (context, ordercontroller, child) {
                                         return Padding(
                                           padding:
-                                              const EdgeInsets.only(left: 35),
+                                              const EdgeInsets.only(left: 20),
                                           child: IconButton(
                                               onPressed: () async {
                                                 Product cp = cartcontroller
@@ -135,7 +142,7 @@ class CartScreen extends StatelessWidget {
                                                   gravity: ToastGravity.CENTER,
                                                 );
                                               },
-                                              icon: Icon(Icons.delete)),
+                                              icon: const Icon(Icons.delete)),
                                         );
                                       },
                                     )
@@ -146,27 +153,26 @@ class CartScreen extends StatelessWidget {
                           },
                         );
                 case CartStatus.LOADING:
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 case CartStatus.NIL:
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
               }
             }
           },
         ),
         bottomNavigationBar: Consumer<CartController>(
           builder: (context, cartcontroller, child) {
-            print("botom");
             return Card(
               elevation: 20,
               child: Container(
                 height: 70,
                 width: double.infinity,
-                decoration:
-                    BoxDecoration(color: Color.fromARGB(179, 247, 238, 238)),
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(179, 247, 238, 238)),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12.0),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 12.0),
                       child: Text(
                         "Your total bill :   ₹ ",
                         style: TextStyle(
@@ -176,24 +182,33 @@ class CartScreen extends StatelessWidget {
                     (cartcontroller.cartstatus == CartStatus.DONE)
                         ? Text(
                             cartcontroller.bill.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w800, fontSize: 16),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
                     Padding(
                       padding: const EdgeInsets.only(left: 35),
                       child: SizedBox(
                         width: displayWidth(context) * 0.4,
                         child: MaterialButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CartPaymentScreen(),
-                                ));
+                            if (cartcontroller.productlist.isNotEmpty) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CartPaymentScreen(),
+                                  ));
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: "Your cart is empty ",
+                                fontSize: 16,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            }
                           },
                           color: Colors.orange,
-                          child: Text(
+                          child: const Text(
                             "Continue",
                             style: TextStyle(color: Colors.white, fontSize: 18),
                           ),

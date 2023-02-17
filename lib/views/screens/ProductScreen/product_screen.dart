@@ -29,7 +29,7 @@ class ProductScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("Product Screen"),
+        title: const Text("Product Screen"),
         backgroundColor: Colors.amber[600],
         actions: [
           Consumer<ProductController>(
@@ -37,7 +37,7 @@ class ProductScreen extends StatelessWidget {
               return Consumer<WishlistController>(
                 builder: (context, wishlistcontroller, child) {
                   return IconButton(
-                    icon: Icon(Icons.favorite),
+                    icon: const Icon(Icons.favorite),
                     onPressed: () {
                       if (wishlistcontroller.wishlistproducts.isEmpty) {
                         print("wishlistupdate");
@@ -59,7 +59,7 @@ class ProductScreen extends StatelessWidget {
               );
             },
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           )
         ],
@@ -70,14 +70,15 @@ class ProductScreen extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.amber[600]),
         child: Stack(alignment: Alignment.bottomCenter, children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 140.0),
+            padding: const EdgeInsets.only(bottom: 70.0),
             child: Card(
-              margin: EdgeInsets.only(top: 40, left: 10, right: 10),
+              margin: const EdgeInsets.only(
+                  top: 10, left: 10, right: 10, bottom: 10),
               elevation: 10,
               child: Container(
                   // white container
 
-                  height: 500,
+                  height: 900,
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -88,7 +89,7 @@ class ProductScreen extends StatelessWidget {
                     //   bottomRight: Radius.circular(15),
                     // ),
                   ),
-                  margin: EdgeInsets.only(top: 30, left: 10, right: 10),
+                  margin: const EdgeInsets.only(top: 30, left: 10, right: 10),
                   child: Consumer<ProductController>(
                     builder: (context, productcontroller, child) {
                       return SingleChildScrollView(
@@ -99,13 +100,13 @@ class ProductScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                               child: Image.network(
                                 product.image,
-                                height: 200,
+                                height: 300,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
+                            const Padding(
+                              padding: EdgeInsets.only(
                                   top: 20, left: 20, bottom: 10),
                               child: Text(
                                 "Product Details",
@@ -115,24 +116,27 @@ class ProductScreen extends StatelessWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
+                                  horizontal: 19, vertical: 10),
                               child: Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Brand   ",
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 130,
                                   ),
                                   Text(
                                     product.productname,
-                                    style: TextStyle(
+                                    style: const TextStyle(
+                                        overflow: TextOverflow.ellipsis,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
+                                    // maxLines: 1,
+                                    //overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -142,19 +146,19 @@ class ProductScreen extends StatelessWidget {
                                   left: 20, top: 10, bottom: 10),
                               child: Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Price    ",
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 132,
                                   ),
                                   Text(
                                     "₹ ${product.prize.toString()}",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -166,19 +170,19 @@ class ProductScreen extends StatelessWidget {
                                   horizontal: 20, vertical: 10),
                               child: Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Weight  ",
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 128,
                                   ),
                                   Text(
                                     "${product.weigth.toString()} gm",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -190,19 +194,19 @@ class ProductScreen extends StatelessWidget {
                                   horizontal: 20, vertical: 10),
                               child: Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Quantity avl",
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 97,
                                   ),
                                   Text(
                                     "${product.qty.toString()} pieces",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -226,7 +230,7 @@ class ProductScreen extends StatelessWidget {
                         builder: (context, cartcontroller, child) {
                           if (cartcontroller.cartstatus == CartStatus.NIL) {
                             cartcontroller.setcart();
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           } else {
                             return Container(
                               height: 55,
@@ -237,7 +241,6 @@ class ProductScreen extends StatelessWidget {
                                   ordercontroller.addproducttocartlist(
                                       productid: product.productid);
                                   if (cartcontroller.productlist.isEmpty) {
-                                    print("empty");
                                     await cartcontroller.createcartdb(
                                         productname: product.productname,
                                         categoryid: product.categoryid,
@@ -247,7 +250,7 @@ class ProductScreen extends StatelessWidget {
                                         weight: product.weigth!,
                                         image: product.image);
                                   } else {
-                                    print("notempty");
+                                    print("no empty");
                                     await cartcontroller.addproduct(
                                         productname: product.productname,
                                         categoryid: product.categoryid,
@@ -264,7 +267,7 @@ class ProductScreen extends StatelessWidget {
                                     gravity: ToastGravity.SNACKBAR,
                                   );
                                 },
-                                child: Center(
+                                child: const Center(
                                     child: Text(
                                   "Add to cart",
                                   style: TextStyle(
@@ -295,7 +298,7 @@ class ProductScreen extends StatelessWidget {
                       height: 55,
                       width: displayWidth(context) * 0.5,
                       color: Colors.orange,
-                      child: Center(
+                      child: const Center(
                           child: Text(
                         "Buy now",
                         style: TextStyle(

@@ -19,13 +19,13 @@ class TrendingScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 color: Colors.black87,
               )),
           elevation: 0,
           backgroundColor: Colors.amber[600],
-          title: Text(
+          title: const Text(
             "Trending screen",
             style: TextStyle(color: Colors.black87),
           )),
@@ -75,7 +75,7 @@ class TrendingScreen extends StatelessWidget {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(25),
                                   ),
-                                  padding: EdgeInsets.all(9),
+                                  padding: const EdgeInsets.all(9),
                                   margin:
                                       const EdgeInsets.symmetric(horizontal: 9),
                                   child: InkWell(
@@ -145,7 +145,7 @@ class TrendingScreen extends StatelessWidget {
                       child: Card(
                         elevation: 10,
                         child: Container(
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                                 horizontal: 9, vertical: 9),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
@@ -172,14 +172,18 @@ class TrendingScreen extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Text(
+                                    // ignore: prefer_interpolation_to_compose_strings
                                     " Name : " +
                                         productcontroller
                                             .trendingproduct[index].productname,
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle1!
-                                        .merge(TextStyle(
-                                            fontWeight: FontWeight.w600)),
+                                        .merge(
+                                          const TextStyle(
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 const SizedBox(

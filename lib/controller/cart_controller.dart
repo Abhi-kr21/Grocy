@@ -11,7 +11,7 @@ class CartController extends ChangeNotifier {
   List<int> quantity = [];
   int bill = 0;
   cartquantityupdate({required int index}) {
-    if (quantity[index] > 0 && quantity[index] < 10) {
+    if (quantity[index] > 0 && quantity[index] < 9) {
       ++quantity[index];
     }
 
@@ -19,7 +19,7 @@ class CartController extends ChangeNotifier {
   }
 
   cartquantitydecrease({required int index}) {
-    if (quantity[index] > 1) {
+    if (quantity[index] > 2) {
       --quantity[index];
     }
 
@@ -28,14 +28,13 @@ class CartController extends ChangeNotifier {
 
   setquantity() async {
     // Future.delayed(Duration(microseconds: 2));
-    print("set");
-    print(quantity.length);
+
     quantity = [];
     for (var i = 0; i < productlist.length; i++) {
       quantity.add(1);
     }
-    print(productlist.length);
-    print(quantity);
+    // print(productlist.length);
+    // print(quantity);
     int temp = 0;
     for (var i = 0; i < productlist.length; i++) {
       temp += (productlist[i].prize * quantity[i]);
@@ -46,18 +45,18 @@ class CartController extends ChangeNotifier {
   }
 
   billupdate({required int index}) {
-    print("bill update");
+    // print("bill update");
     if (quantity[index] < 10) {
-      bill = bill + productlist[index].prize;
+      bill = quantity[index] * productlist[index].prize;
     }
 
     notifyListeners();
   }
 
   billdecreses({required int index}) {
-    print("bill decrese");
+    // print("bill decrese");
     if (quantity[index] > 1) {
-      bill = bill - productlist[index].prize;
+      bill = quantity[index] * productlist[index].prize;
     }
 
     notifyListeners();
@@ -103,13 +102,14 @@ class CartController extends ChangeNotifier {
         if (productid == productlist[i].productid) {
           index = i;
           productexist = true;
+          billupdate(index: i);
           break;
         }
       }
       if (productexist == false) {
         productlist.add(product);
         quantity.add(1);
-
+        billupdate(index: quantity.length - 1);
         await cartdb.doc(uid).update({
           'product': List<dynamic>.from(productlist.map((x) => x.tojson()))
         });

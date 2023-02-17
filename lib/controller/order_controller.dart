@@ -64,7 +64,7 @@ class OrderController extends ChangeNotifier {
           .collection("totals orders")
           .add(order.tojson());
       await res.update({'orderid': res.id});
-      await res.update({'orderid': res.id});
+      // await res.update({'orderid': res.id});
     } catch (e) {
       print(e);
     }
@@ -78,7 +78,7 @@ class OrderController extends ChangeNotifier {
   }
 
   addproducttocartlist({required String productid}) {
-    print("added producct to cart list");
+    // print("added producct to cart list");
     cartlist.add(productid);
     print(cartlist);
     notifyListeners();

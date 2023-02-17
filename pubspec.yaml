@@ -45,6 +45,8 @@ dependencies:
   cloud_firestore: ^4.3.1
   fluttertoast: ^8.1.2
   razorpay_flutter: ^1.3.4
+  internet_connection_checker: ^1.0.0+1
+  connectivity_plus: ^3.0.3
 
 dev_dependencies:
   flutter_test:

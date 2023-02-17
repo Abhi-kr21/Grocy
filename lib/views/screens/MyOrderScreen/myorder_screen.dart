@@ -23,56 +23,59 @@ class MyOrderScreen extends StatelessWidget {
             } else {
               switch (ordercontroller.orderstatus) {
                 case OrderStatus.DONE:
-                  return ListView.builder(
-                    itemCount: ordercontroller.orders.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        height: 120,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Colors.amberAccent,
-                            borderRadius: BorderRadius.circular(10)),
-                        margin: EdgeInsets.all(10),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 10,
+                  return (ordercontroller.orders.isEmpty)
+                      ? const Center(child: Text("No order made yet"))
+                      : ListView.builder(
+                          itemCount: ordercontroller.orders.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            print(ordercontroller.orders);
+                            return Container(
+                              height: 120,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.amberAccent,
+                                  borderRadius: BorderRadius.circular(10)),
+                              margin: EdgeInsets.all(10),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 10,
+                                      ),
+                                      child: Text(
+                                          "order id : ${ordercontroller.orders[index].orderid}"),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 10,
+                                      ),
+                                      child: Text(
+                                          "Date&Time : ${ordercontroller.orders[index].madeorderon.toDate().toString()}"),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    MaterialButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OrderedProductScreen(
+                                                index: index,
+                                              ),
+                                            ));
+                                      },
+                                      child: Text("view product"),
+                                      color: Colors.orangeAccent,
+                                    )
+                                  ],
                                 ),
-                                child: Text(
-                                    "order id : ${ordercontroller.orders[index].orderid}"),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 10,
-                                ),
-                                child: Text(
-                                    "Date&Time : ${ordercontroller.orders[index].madeorderon.toDate().toString()}"),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              MaterialButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            OrderedProductScreen(
-                                          index: index,
-                                        ),
-                                      ));
-                                },
-                                child: Text("view product"),
-                                color: Colors.orangeAccent,
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                            );
+                          },
+                        );
                 case OrderStatus.LOADING:
                   return Center(child: CircularProgressIndicator());
                 case OrderStatus.NIL:

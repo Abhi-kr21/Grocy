@@ -45,20 +45,23 @@ class WishlistController extends ChangeNotifier {
     await Future.delayed(Duration(microseconds: 1));
     notifyListeners();
     var wishlistSnapshot = await wishlistdb.doc(uid).get();
-    WishList wishlist = WishList.fromMap(wishlistSnapshot.data()!);
-    var productsnapshots = await productDb.get();
+    if (wishlistSnapshot.data() != null) {
+      WishList wishlist = WishList.fromMap(wishlistSnapshot.data()!);
+      var productsnapshots = await productDb.get();
 
-    for (var product in productsnapshots.docs) {
-      Product p = Product.fromJson(product.data());
-      products.add(p);
-    }
-    wishlist.productid.forEach((element) {
-      products.forEach((product) {
-        if (element == product.productid) {
-          wishlistproducts.add(product);
-        }
+      for (var product in productsnapshots.docs) {
+        Product p = Product.fromJson(product.data());
+        products.add(p);
+      }
+      wishlist.productid.forEach((element) {
+        products.forEach((product) {
+          if (element == product.productid) {
+            wishlistproducts.add(product);
+          }
+        });
       });
-    });
+    }
+
     wishliststatus = WishListStatus.DONE;
     notifyListeners();
   }

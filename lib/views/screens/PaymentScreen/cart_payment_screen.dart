@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:store/constants/heigth_width_constant.dart';
 import 'package:store/controller/cart_controller.dart';
 import 'package:store/controller/order_controller.dart';
+import 'package:store/views/screens/HomeScreen/home_screen.dart';
 
 class CartPaymentScreen extends StatelessWidget {
   const CartPaymentScreen({super.key});
@@ -49,6 +51,16 @@ class CartPaymentScreen extends StatelessWidget {
                                 await ordercontroller.makeordercart();
                                 await ordercontroller.emptycartlist();
                                 cartcontroller.clearcart();
+                                Fluttertoast.showToast(
+                                  msg: "Order Successfull",
+                                  fontSize: 16,
+                                  gravity: ToastGravity.BOTTOM,
+                                );
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeScreen(),
+                                    ));
                               },
                               color: Colors.orange,
                               child: Text(

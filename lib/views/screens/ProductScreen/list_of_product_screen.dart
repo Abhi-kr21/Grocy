@@ -52,8 +52,7 @@ class ListOfProduct extends StatelessWidget {
                                   ));
                             },
                             child: Container(
-                              decoration:
-                                  BoxDecoration(color: Colors.amberAccent),
+                              decoration: BoxDecoration(color: Colors.white),
                               margin: EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 5),
                               child: Column(
@@ -73,7 +72,10 @@ class ListOfProduct extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                      " Brand:  ${productcontroller.productList[catId]![index].productname}"),
+                                    " Brand:  ${productcontroller.productList[catId]![index].productname}",
+                                    style: TextStyle(),
+                                    maxLines: 1,
+                                  ),
                                   Text(
                                       " Price  : ₹ ${productcontroller.productList[catId]![index].prize.toString()}"),
                                   SizedBox(height: 4),

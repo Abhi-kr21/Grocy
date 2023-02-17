@@ -93,11 +93,11 @@ class ProductController extends ChangeNotifier {
     });
     // print(" hhhh:${frequentproduct}");
     // await Future.delayed(Duration(microseconds: 1));
-    print(" length  ${bestSellingproduct.length}");
-    bestSellingproduct.forEach(
-      (element) => print(element.image),
-    );
-    print("endds");
+    // print(" length  ${bestSellingproduct.length}");
+    // bestSellingproduct.forEach(
+    //   (element) => print(element.image),
+    // );
+    // print("endds");
     notifyListeners();
   }
 
