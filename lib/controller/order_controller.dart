@@ -29,7 +29,7 @@ class OrderController extends ChangeNotifier {
           .doc(uid)
           .collection("totals orders")
           .add(order.tojson());
-
+      await orderdb.doc(uid).set({"uid": uid});
       await res.update({'orderid': res.id});
       await fetchorder();
     } catch (e) {
@@ -64,6 +64,7 @@ class OrderController extends ChangeNotifier {
           .doc(uid)
           .collection("totals orders")
           .add(order.tojson());
+      await orderdb.doc(uid).set({"uid": uid});
       await res.update({'orderid': res.id});
       await fetchorder();
     } catch (e) {
